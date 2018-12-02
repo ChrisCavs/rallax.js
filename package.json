@@ -12,7 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/ChrisCavs/rallax.js.git"
   },
-  "keywords": ["parallax, scroll, scrolling, rallax"],
+  "keywords": [
+    "parallax, scroll, scrolling, rallax"
+  ],
   "author": {
     "name": "Christopher Cavalea",
     "email": "chriscavs94@gmail.com",
