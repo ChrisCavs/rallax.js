@@ -1,0 +1,29 @@
+{
+  "name": "rallax.js",
+  "version": "2.0.0",
+  "description": "Dead-simple parallax scrolling.",
+  "main": "dist/rallax.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisCavs/rallax.js.git"
+  },
+  "keywords": ["parallax, scroll, scrolling, rallax"],
+  "author": {
+    "name": "Christopher Cavalea",
+    "email": "chriscavs94@gmail.com",
+    "url": "http://chriscavs.github.io/"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "rollup": "^0.64.1",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-node-resolve": "^3.3.0"
+  }
+}
