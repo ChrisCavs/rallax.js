@@ -3,28 +3,21 @@ let targets = []
 
 const defaultOptions = {
   speed: 0.3,
-  disable: () => window.innerWidth < 400,
-  onDisable: () => {},
-  enable: () => {},
-  onEnable: () => {}
 }
 
 class RallaxObj {
-  constructor(target, { speed, disable, onDisable, enable, onEnable }) {
+  constructor(target, { speed }) {
     this.speed = speed || defaultOptions.speed
-    this.disable = disable || defaultOptions.disable
-    this.onDisable = onDisable || defaultOptions.onDisable
-    this.enable = enable || defaultOptions.enable
-    this.onEnable = onEnable || defaultOptions.onEnable
-
+		this.conditions = []
     this.active = true
-    this.target = target
+		this.target = target
 
     if (typeof target === 'string') {
       this.target = document.querySelector(`${target}`)
     }
 
     this.winHeight = window.innerHeight
+		this.accumulated = 0
     this.getRect()
 
     this.startScroll = this.targetR.top - this.winHeight > 0
@@ -32,25 +25,46 @@ class RallaxObj {
       : 0
   }
 
+	// API
   stop() {
     this.active = false
-    this.onDisable()
   }
 
   start() {
     this.active = true
-    this.onEnable()
   }
 
+	changeSpeed(newSpeed) {
+		if (this.inWindow()) {
+			this.accumulated = this.getTranslation()
+			this.startScroll = window.scrollY
+		}
+		this.speed = newSpeed
+	}
+
+	when(condition, action) {
+		this.conditions.push({condition, action})
+	}
+
+	// HELPERS
   getTranslation() {
     const dist = window.scrollY - this.startScroll
-    return dist * this.speed
+    const translation = dist * this.speed
+		return translation + this.accumulated
   }
 
   getRect() {
     this.targetR = this.target.getBoundingClientRect()
     return this.targetR
   }
+
+	inWindow() {
+		this.getRect()
+		const top = this.targetR.top
+		const bottom = this.targetR.bottom
+
+		return top < this.winHeight && bottom > 0
+	}
 
   move() {
     this.target
@@ -68,13 +82,11 @@ const addListener = () => {
 const controller = targets => {
   requestAnimationFrame(() => {
     targets.forEach(obj => {
-      if (obj.disable() && obj.active) {
-        return obj.stop()
-      }
-
-      if (!obj.active && obj.enable()) {
-        obj.start()
-      }
+			obj
+				.conditions
+				.forEach(({condition, action}) => {
+					if (condition()) action()
+				})
 
       if (obj.active) {
         obj.move()
