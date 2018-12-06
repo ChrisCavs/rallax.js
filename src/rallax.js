@@ -44,13 +44,14 @@ class RallaxObj {
 
 	when(condition, action) {
 		this.conditions.push({condition, action})
+		return this
 	}
 
 	// HELPERS
   getTranslation() {
     const dist = window.scrollY - this.startScroll
-    const translation = dist * this.speed
-		return translation + this.accumulated
+    const translation = (dist * this.speed) + this.accumulated
+		return translation >= 0 ? translation : 0
   }
 
   getRect() {
