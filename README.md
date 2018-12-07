@@ -129,7 +129,7 @@ Calling `changeSpeed` will change the speed of the target parallax effect.
 
 ```es6
 // initialize the target at a speed of 0.6
-const parallax = rallax('.parallax', {speed: 0.6})
+const parallax = rallax('.parallax', { speed: 0.6 })
 
 // change speed to 1, making the target appear fixed
 parallax.changeSpeed(1)
