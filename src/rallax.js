@@ -13,14 +13,14 @@ class RallaxObj {
     this.mobileDisable = false
     this.conditions = []
     this.active = true
-		this.target = target
+    this.target = target
 
     if (typeof target === 'string') {
       this.target = document.querySelector(`${target}`)
     }
 
     this.winHeight = window.innerHeight
-		this.accumulated = 0
+    this.accumulated = 0
     this.getRect()
 
     this.startScroll = this.targetR.top - this.winHeight > 0
@@ -28,7 +28,7 @@ class RallaxObj {
       : 0
   }
 
-	// API
+  // API
   stop() {
     this.active = false
   }
@@ -41,18 +41,18 @@ class RallaxObj {
     return this.speed
   }
 
-	changeSpeed(newSpeed) {
-		if (this.inWindow() && newSpeed !== this.speed) {
-			this.accumulated = this.getTranslation()
-			this.startScroll = this.scrollY()
-		}
-		this.speed = newSpeed
-	}
+  changeSpeed(newSpeed) {
+    if (this.inWindow() && newSpeed !== this.speed) {
+      this.accumulated = this.getTranslation()
+      this.startScroll = this.scrollY()
+    }
+    this.speed = newSpeed
+  }
 
-	when(condition, action) {
-		this.conditions.push({condition, action})
-		return this
-	}
+  when(condition, action) {
+    this.conditions.push({condition, action})
+    return this
+  }
 
   // HELPERS
   scrollY() {
@@ -62,7 +62,7 @@ class RallaxObj {
   getTranslation() {
     const dist = this.scrollY() - this.startScroll
     const translation = (dist * this.speed) + this.accumulated
-		return translation >= 0 ? translation : 0
+    return translation >= 0 ? translation : 0
   }
 
   getRect() {
@@ -70,13 +70,13 @@ class RallaxObj {
     return this.targetR
   }
 
-	inWindow() {
-		this.getRect()
-		const top = this.targetR.top
-		const bottom = this.targetR.bottom
+  inWindow() {
+    this.getRect()
+    const top = this.targetR.top
+    const bottom = this.targetR.bottom
 
-		return top < this.winHeight && bottom > 0
-	}
+    return top < this.winHeight && bottom > 0
+  }
 
   move() {
     this.target
@@ -100,10 +100,10 @@ const controller = targets => {
     targets.forEach(obj => {
       if (obj.mobileDisable) return
 
-			obj.conditions
-				.forEach(({condition, action}) => {
-					if (condition()) action()
-				})
+      obj.conditions
+        .forEach(({condition, action}) => {
+          if (condition()) action()
+        })
 
       if (obj.active) {
         obj.move()
