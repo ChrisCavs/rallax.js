@@ -71,7 +71,7 @@ Explanation of each option follows:
 
 ### speed
 
-Accepts an `integer` between `0` and `1`.
+Accepts a `float` number.
 
 At a speed of `0`, the target will scroll like a static element.
 At a speed of `1`, the target will appear fixed (will move at the speed of scroll).
