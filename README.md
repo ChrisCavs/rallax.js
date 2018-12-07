@@ -42,8 +42,6 @@ import rallax from 'rallax.js'
 To generate the desired effect, call Rallax, passing in your element/target-selector and your desired options.
 
 ```es6
-// target:            <div class="parallax"></div>
-
 const options = { speed: 0.4 }
 const parallax = rallax(".parallax", options)
 
