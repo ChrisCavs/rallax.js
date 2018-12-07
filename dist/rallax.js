@@ -33,53 +33,19 @@
 
   var defaultOptions = {
     speed: 0.3,
-    disable: function disable() {
-      return window.innerWidth < 400;
-    },
-    onDisable: function onDisable() {},
-    enable: function enable() {},
-    onEnable: function onEnable() {}
-  };
-
-  var addListener = function addListener() {
-    window.addEventListener('scroll', function (event) {
-      controller(targets);
-    });
-  };
-
-  var controller = function controller(targets) {
-    requestAnimationFrame(function () {
-      targets.forEach(function (obj) {
-        if (obj.disable() && obj.active) {
-          return obj.stop();
-        }
-
-        if (!obj.active && obj.enable()) {
-          obj.start();
-        }
-
-        if (obj.active) {
-          obj.move();
-        }
-      });
-    });
+    mobilePx: false
   };
 
   var RallaxObj = function () {
     function RallaxObj(target, _ref) {
       var speed = _ref.speed,
-          disable = _ref.disable,
-          onDisable = _ref.onDisable,
-          enable = _ref.enable,
-          onEnable = _ref.onEnable;
+          mobilePx = _ref.mobilePx;
       classCallCheck(this, RallaxObj);
 
       this.speed = speed || defaultOptions.speed;
-      this.disable = disable || defaultOptions.disable;
-      this.onDisable = onDisable || defaultOptions.onDisable;
-      this.enable = enable || defaultOptions.enable;
-      this.onEnable = onEnable || defaultOptions.onEnable;
-
+      this.mobilePx = mobilePx || defaultOptions.mobilePx;
+      this.mobileDisable = false;
+      this.conditions = [];
       this.active = true;
       this.target = target;
 
@@ -88,34 +54,74 @@
       }
 
       this.winHeight = window.innerHeight;
+      this.accumulated = 0;
       this.getRect();
 
       this.startScroll = this.targetR.top - this.winHeight > 0 ? this.targetR.top - this.winHeight : 0;
     }
 
+    // API
+
+
     createClass(RallaxObj, [{
       key: 'stop',
       value: function stop() {
         this.active = false;
-        this.onDisable();
       }
     }, {
       key: 'start',
       value: function start() {
         this.active = true;
-        this.onEnable();
+      }
+    }, {
+      key: 'getSpeed',
+      value: function getSpeed() {
+        return this.speed;
+      }
+    }, {
+      key: 'changeSpeed',
+      value: function changeSpeed(newSpeed) {
+        if (this.inWindow() && newSpeed !== this.speed) {
+          this.accumulated = this.getTranslation();
+          this.startScroll = this.scrollY();
+        }
+        this.speed = newSpeed;
+      }
+    }, {
+      key: 'when',
+      value: function when(condition, action) {
+        this.conditions.push({ condition: condition, action: action });
+        return this;
+      }
+
+      // HELPERS
+
+    }, {
+      key: 'scrollY',
+      value: function scrollY() {
+        return window.scrollY || window.pageYOffset;
       }
     }, {
       key: 'getTranslation',
       value: function getTranslation() {
-        var dist = window.scrollY - this.startScroll;
-        return dist * this.speed;
+        var dist = this.scrollY() - this.startScroll;
+        var translation = dist * this.speed + this.accumulated;
+        return translation >= 0 ? translation : 0;
       }
     }, {
       key: 'getRect',
       value: function getRect() {
         this.targetR = this.target.getBoundingClientRect();
         return this.targetR;
+      }
+    }, {
+      key: 'inWindow',
+      value: function inWindow() {
+        this.getRect();
+        var top = this.targetR.top;
+        var bottom = this.targetR.bottom;
+
+        return top < this.winHeight && bottom > 0;
       }
     }, {
       key: 'move',
@@ -125,6 +131,45 @@
     }]);
     return RallaxObj;
   }();
+
+  var addListener = function addListener() {
+    window.addEventListener('scroll', function (event) {
+      controller(targets);
+    });
+
+    window.addEventListener('resize', function (event) {
+      resize();
+    });
+  };
+
+  var controller = function controller(targets) {
+    requestAnimationFrame(function () {
+      targets.forEach(function (obj) {
+        if (obj.mobileDisable) return;
+
+        obj.conditions.forEach(function (_ref2) {
+          var condition = _ref2.condition,
+              action = _ref2.action;
+
+          if (condition()) action();
+        });
+
+        if (obj.active) {
+          obj.move();
+        }
+      });
+    });
+  };
+
+  var resize = function resize() {
+    var newSize = window.innerWidth;
+
+    targets.forEach(function (obj) {
+      if (obj.mobilePx >= newSize) {
+        obj.mobileDisable = true;
+      }
+    });
+  };
 
   var rallax = (function (target) {
     var userOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

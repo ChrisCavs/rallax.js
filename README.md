@@ -15,6 +15,7 @@ Follow these steps to get started:
 3. [Call](#call)
 4. [Review Options](#options)
 5. [Review API](#api)
+6. [Handling Page Refresh](#handlingPageRefresh)
 
 ### Overview
 
@@ -89,6 +90,7 @@ Calling Rallax will return an object with a set of methods defined.  Those metho
 
 * [stop](#stop)
 * [start](#start)
+* [getSpeed](#getspeed)
 * [changeSpeed](#changeSpeed)
 * [when](#when)
 
@@ -117,6 +119,10 @@ parallax.stop()
 parallax.start()
 ```
 
+### getSpeed
+
+Returns the current speed of the target.
+
 ### changeSpeed (speed)
 
 Accepts a `float` between `0` and `1`.
@@ -136,6 +142,8 @@ parallax.changeSpeed(1)
 Accepts a condition `function` and an action `function`.
 
 Calling `when` will queue a condition and action onto the target, which will be evaluated before the target is scrolled.  The `when` method is useful for setting up all kinds of special effects.
+
+`when` methods can be chained together.
 
 ```es6
 const parallax = rallax('.parallax')
@@ -157,6 +165,20 @@ parallax.when(
   },
   () => parallax.stop()
 )
+```
+
+## Handling Page Refresh
+
+Rallax.js will adapt to the refreshing of the page, and place targets where they would be normally if they were to scroll to the point of refresh.
+
+**However**, if using [changeSpeed](#changeSpeed) in conjunction with [when](#when) methods/conditionals, it's important to scroll to the top of the page when the user refreshes.  Code to handle such a situation:
+
+```es6
+window.onbeforeunload = () => {
+  window.scrollTo(0, 0)
+  // alternatively, you can put an animation function here
+  // that will bring user to the top of page
+}
 ```
 
 ## Browser Support

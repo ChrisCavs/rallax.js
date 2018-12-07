@@ -37,8 +37,12 @@ class RallaxObj {
     this.active = true
   }
 
+  getSpeed() {
+    return this.speed
+  }
+
 	changeSpeed(newSpeed) {
-		if (this.inWindow()) {
+		if (this.inWindow() && newSpeed !== this.speed) {
 			this.accumulated = this.getTranslation()
 			this.startScroll = this.scrollY()
 		}
