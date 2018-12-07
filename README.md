@@ -12,15 +12,15 @@ Follow these steps to get started:
 
 1. [Overview](#overview)
 2. [Install](#install)
-3. [Import](#import)
-4. [Call](#call)
-5. [Review Options](#options)
+3. [Call](#call)
+4. [Review Options](#options)
+5. [Review API](#api)
 
 ### Overview
 
-Rallax.js creates a parallax effect given a target HTML element and an image location.  It will create an `<img>` element, and position it `absolute` behind your target element.
+**The problem**: You want to create a dynamic parallax scrolling effect on your web page, but you don't want to use jQuery OR dramatically impact your website's performance.
 
-As the user scrolls, the position of the `<img>` element will change relative to the target's location, creating the desired effect.
+**The solution**: Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and no dependencies.
 
 ### Install
 
@@ -30,9 +30,7 @@ Using NPM, install Rallax, and save it to your `package.json` dependencies.
 $ npm install rallax.js --save
 ```
 
-### Import
-
-Import Rallax, naming it according to your preference.
+Then, import Rallax, naming it according to your preference.
 
 ```es6
 import rallax from 'rallax.js'
@@ -40,18 +38,21 @@ import rallax from 'rallax.js'
 
 ### Call
 
-To generate the desired effect, call Rallax, passing in your target-selector, image location, and your desired options.
+To generate the desired effect, call Rallax, passing in your element/target-selector and your desired options.
 
 ```es6
 // target:            <div class="parallax"></div>
-// image location:    "./test-image.jpg"
 
 const options = { speed: 0.4 }
+const parallax = rallax(".parallax", options)
 
-rallax(".parallax", "./test-image.jpg", options)
+// or:
+
+const target = document.querySelector('.parallax')
+const parallax = rallax(target, { speed: 0.4 })
 ```
 
-**Note**: Rallax.js does not make any assumptions regarding the styling of the target element.  **In order to see the effect, you must set either a transparent or slighty-transparent background on the target.**
+**Note**: Rallax.js does not make any assumptions regarding the styling of the target element.
 
 ## Options
 
@@ -60,71 +61,103 @@ You are not required to pass any options.  All options come with sensible defaul
 ```es6
 {
   speed: 0.3,
-  offset: {},
-  zIndex: -1000
+  mobilePx: false
 }
 ```
 
 Explanation of each option follows:
 
 * [speed](#speed)
-* [offset](#offset)
-* [zIndex](#zIndex)
-* [minPixels](#minPixels)
-* [maxPixels](#maxPixels)
+* [mobilePx](#mobilePx)
 
 ### speed
 
 Accepts an `integer` between `0` and `1`.
 
-At a speed of `0`, the image will scroll with the target.  
-At a speed of `1`, the image will appear fixed in place.
+At a speed of `0`, the target will scroll like a static element.
+At a speed of `1`, the target will appear fixed (will move at the speed of scroll).
 
-### offset
+### mobilePx
 
-Accepts an `object`.
+Accepts an `integer`, as number of pixels.
 
-The `offset` option works similar to the [background-position](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position) CSS property.  `offset` will specify the **center** of the image relative to the target element.
+Pass this option if you want parallax for this target to automatically be disabled at a certain screen width.
 
-`offset` is declared with two of the following keys: `top`, `bot`, `left`, `right`, followed by a an `integer` representing the number of pixels.
+## API
+
+Calling Rallax will return an object with a set of methods defined.  Those methods are:
+
+* [stop](#stop)
+* [start](#start)
+* [changeSpeed](#changeSpeed)
+* [when](#when)
+
+### stop
+
+Calling `stop()` will pause the parallax effect on the target until the next time you call `start()`.
 
 ```es6
-// position the center of the image 10px from the top of the
-// target, and 40 px from the left.
+const parallax = rallax('.parallax')
 
-rallax(".parallax", "./test-image.jpg", {
-  offset: {
-    top: 10,
-    left: 40
-  }
-})
-
-// by default, the image will be centered relative to the target
-
-rallax(".parallax", "./test-image.jpg")
+if (condition) {
+  parallax.stop()
+}
 ```
 
-### zIndex
+### start
 
-Accepts an `integer`. 
+Calling `start()` will re-enable the parallax effect if you had previously disabled it.  **Note:** calling `start()` will not re-enable the effect if you have disabled it with the [mobilePx](#mobilePx) option.
 
-`zIndex` specifies the [z-index](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index) property of the parallax image.
+```es6
+const parallax = rallax('.parallax')
+parallax.stop()
 
-### maxPixels
+// some time later
 
-Accepts an `integer`, specifying the maximum pixel width of the screen before 'turning off' the parallax effect.
+parallax.start()
+```
 
-Set `maxPixels` if you would like to turn off the parallax effect for very large screens.
+### changeSpeed (speed)
 
-Once turned off, the parallax image will appear as a background image for the target.
+Accepts a `float` between `0` and `1`.
 
-### minPixels
+Calling `changeSpeed` will change the speed of the target parallax effect.
 
-Accepts an `integer`, specifying the minimum pixel width of the screen before 'turning off' the parallax effect.
+```es6
+// initialize the target at a speed of 0.6
+const parallax = rallax('.parallax', {speed: 0.6})
 
-Set `minPixels` if you would like to turn off the parallax effect for very small screens (such as mobile devices).
+// change speed to 1, making the target appear fixed
+parallax.changeSpeed(1)
+```
 
-Once turned off, the parallax image will appear as a background image for the target.
+### when (condition, action)
+
+Accepts a condition `function` and an action `function`.
+
+Calling `when` will queue a condition and action onto the target, which will be evaluated before the target is scrolled.  The `when` method is useful for setting up all kinds of special effects.
+
+```es6
+const parallax = rallax('.parallax')
+
+// after reaching a certain position in the document, 
+// increase the target's speed
+parallax.when(
+  () => window.scrollY > 400,
+  () => parallax.changeSpeed(1)
+)
+
+// stop the parallax after a certain period of time
+const startTime = new Date().getTime()
+
+parallax.when(
+  () => {
+    const newTime = new Date().getTime()
+    return newTime - startTime > 4000
+  },
+  () => parallax.stop()
+)
+```
 
 ## Browser Support
 

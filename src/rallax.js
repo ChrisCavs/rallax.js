@@ -40,7 +40,7 @@ class RallaxObj {
 	changeSpeed(newSpeed) {
 		if (this.inWindow()) {
 			this.accumulated = this.getTranslation()
-			this.startScroll = window.scrollY
+			this.startScroll = this.scrollY()
 		}
 		this.speed = newSpeed
 	}
@@ -50,9 +50,13 @@ class RallaxObj {
 		return this
 	}
 
-	// HELPERS
+  // HELPERS
+  scrollY() {
+    return window.scrollY || window.pageYOffset
+  }
+
   getTranslation() {
-    const dist = window.scrollY - this.startScroll
+    const dist = this.scrollY() - this.startScroll
     const translation = (dist * this.speed) + this.accumulated
 		return translation >= 0 ? translation : 0
   }
