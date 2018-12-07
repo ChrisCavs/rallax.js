@@ -43,7 +43,7 @@ To generate the desired effect, call Rallax, passing in your element/target-sele
 
 ```es6
 const options = { speed: 0.4 }
-const parallax = rallax(".parallax", options)
+const parallax = rallax('.parallax', options)
 
 // or:
 
