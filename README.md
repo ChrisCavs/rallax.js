@@ -19,9 +19,9 @@ Follow these steps to get started:
 
 ### Overview
 
-**The problem**: You want to create a dynamic parallax scrolling effect on your web page, but you don't want to use jQuery OR dramatically impact your website's performance.
+Want to create dynamic parallax scrolling effects on your web page, without relying on jQuery?
 
-**The solution**: Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and no dependencies.
+Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and no dependencies.
 
 ### Install
 
