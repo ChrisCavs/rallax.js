@@ -3,12 +3,15 @@ let targets = []
 
 const defaultOptions = {
   speed: 0.3,
+  mobilePx: false
 }
 
 class RallaxObj {
-  constructor(target, { speed }) {
+  constructor(target, { speed, mobilePx }) {
     this.speed = speed || defaultOptions.speed
-		this.conditions = []
+    this.mobilePx = mobilePx || defaultOptions.mobilePx
+    this.mobileDisable = false
+    this.conditions = []
     this.active = true
 		this.target = target
 
@@ -78,13 +81,18 @@ const addListener = () => {
   window.addEventListener('scroll', event => {
     controller(targets)
   })
+
+  window.addEventListener('resize', event => {
+    resize()
+  })
 }
 
 const controller = targets => {
   requestAnimationFrame(() => {
     targets.forEach(obj => {
-			obj
-				.conditions
+      if (obj.mobileDisable) return
+
+			obj.conditions
 				.forEach(({condition, action}) => {
 					if (condition()) action()
 				})
@@ -93,6 +101,16 @@ const controller = targets => {
         obj.move()
       }
     })
+  })
+}
+
+const resize = () => {
+  const newSize = window.innerWidth
+
+  targets.forEach(obj => {
+    if (obj.mobilePx >= newSize) {
+      obj.mobileDisable = true
+    }
   })
 }
 
