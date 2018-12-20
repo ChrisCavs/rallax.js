@@ -21,7 +21,7 @@ Follow these steps to get started:
 
 Want to create dynamic parallax scrolling effects on your web page, without relying on jQuery?
 
-Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and a robust API.  Make either a basic scrolling parallax, or change it up with automatic callbacks ([when](#when)), start/stop, speed changes, and mobile handling.
+Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and a robust API.  Make either a basic scrolling parallax, or change it up with automatic callbacks ([when](#when) method), start/stop, speed changes, and mobile handling.
 
 ### Install
 
