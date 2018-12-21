@@ -79,12 +79,9 @@ class RallaxObj {
   }
 
   move() {
-    const translation = this.getTranslation()
-
-    Object.assign(this.target.style, {
-      transform: `translateY(${translation}px)`,
-      "-webkit-transform": `translateY(${translation}px)`
-    })
+    this.target
+      .style
+      .transform = `translateY(${this.getTranslation()}px)`
   }
 }
 
