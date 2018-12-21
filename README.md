@@ -21,7 +21,7 @@ Follow these steps to get started:
 
 Want to create dynamic parallax scrolling effects on your web page, without relying on jQuery?
 
-Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and no dependencies.
+Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and a robust API.  Make either a basic scrolling parallax, or change it up with automatic callbacks ([when](#when) method), start/stop, speed changes, and mobile handling.
 
 ### Install
 
@@ -75,6 +75,7 @@ Accepts a `float` number.
 
 At a speed of `0`, the target will scroll like a static element.
 At a speed of `1`, the target will appear fixed (will move at the speed of scroll).
+At even higher speeds, the target will move quicker than the speed of scroll.
 
 ### mobilePx
 
@@ -123,7 +124,7 @@ Returns the current speed of the target.
 
 ### changeSpeed (speed)
 
-Accepts a `float` between `0` and `1`.
+Accepts a `float`.
 
 Calling `changeSpeed` will change the speed of the target parallax effect.
 
