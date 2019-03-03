@@ -1,6 +1,6 @@
 {
   "name": "rallax.js",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Dead-simple parallax scrolling.",
   "main": "dist/rallax.js",
   "license": "MIT",
