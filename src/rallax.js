@@ -37,6 +37,10 @@ class RallaxObj {
     this.active = true
   }
 
+  destroy() {
+    targets.splice(targets.indexOf(this), 1)
+  }
+
   getSpeed() {
     return this.speed
   }
