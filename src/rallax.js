@@ -62,7 +62,7 @@ class RallaxObj {
   getTranslation() {
     const dist = this.scrollY() - this.startScroll
     const translation = (dist * this.speed) + this.accumulated
-    return translation >= 0 ? translation : 0
+    return translation
   }
 
   getRect() {
